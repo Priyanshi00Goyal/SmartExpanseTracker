@@ -7,6 +7,7 @@ using namespace std;
 int main()
 {
     User user;
+    FinanceManager financeManager;
     int choice;
 
     do
