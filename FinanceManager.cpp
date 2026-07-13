@@ -54,3 +54,21 @@ void FinanceManager::dashboard()
 
     } while(choice != 6);
 }
+
+void FinanceManager::addIncome()
+{
+    Income income;
+
+    cout << "Enter Source: ";
+    cin >> income.source;
+
+    cout << "Enter Amount: ";
+    cin >> income.amount;
+
+    cout << "Enter Date: ";
+    cin >> income.date;
+
+    incomes.push_back(income);
+}
+    } while(choice != 6);
+}
