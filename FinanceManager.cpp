@@ -22,8 +22,8 @@ void FinanceManager::dashboard()
         cout << "6. Set Budget\n";
         cout << "7. Search Expense\n";
         cout << "8. Edit Expense\n";
-        cout << "9. Delete Expense\n"
-        cout << "10. Expense Statistics\n"
+        cout << "9. Delete Expense\n";
+        cout << "10. Expense Statistics\n";
         cout << "10. Logout\n";
 
         cout << "\nEnter your choice: ";
