@@ -19,7 +19,12 @@ void FinanceManager::dashboard()
         cout << "3. View Income\n";
         cout << "4. View Expenses\n";
         cout << "5. Monthly Report\n";
-        cout << "6. Logout\n";
+        cout << "6. Set Budget\n";
+        cout << "7. Search Expense\n";
+        cout << "8. Edit Expense\n";
+        cout << "9. Delete Expense\n"
+        cout << "10. Expense Statistics\n"
+        cout << "10. Logout\n";
 
         cout << "\nEnter your choice: ";
         cin >> choice;
@@ -43,10 +48,30 @@ void FinanceManager::dashboard()
                 break;
 
             case 5:
+                monthlyReport();
+                break;
+            
+            case 6:
                 setBudget();
                 break;
 
-            case 6:
+            case 7:
+                searchExpense();
+                break;
+
+            case 8:
+                editExpense();
+                break;
+
+            case 9:
+                deleteExpense();
+                break;
+
+            case 10:
+                expenseStatistics();
+                break;
+
+            case 11:
                 cout << "\nLogging out...\n";
                 break;
 
@@ -54,7 +79,7 @@ void FinanceManager::dashboard()
                 cout << "\nInvalid choice!\n";
         }
 
-    } while(choice != 7);
+    } while(choice != 12);
 }
 
 void FinanceManager::addIncome()
@@ -125,6 +150,7 @@ void FinanceManager::addExpense()
 
     // Store in vector
     expenses.push_back(expense);
+    checkBudget();
 
     // Save to file
     ofstream file("data/expense.txt", ios::app);
@@ -213,5 +239,166 @@ void FinanceManager::setBudget()
 
 void FinanceManager::checkBudget()
 {
-    // We'll implement this later.
+    double totalExpense = 0;
+    double BudgetUsed =(expenses / monthlyBudget) * 100;
+
+    for (Expense expense : expenses)
+    {
+        totalExpense += expense.amount;
+    }
+
+    cout << "\nCurrent Budget : ₹" << monthlyBudget << endl;
+    cout << "Total Expense  : ₹" << totalExpense << endl;
+    cout << "Budget Used  : " << BudgetUsed << "%" << endl;
+
+    if (totalExpense > monthlyBudget)
+    {
+        cout << "\n⚠️ WARNING! Budget Exceeded by ₹"
+             << totalExpense - monthlyBudget << endl;
+    }
+    else
+    {
+        cout << "\nBudget Remaining : ₹"
+             << monthlyBudget - totalExpense << endl;
+    }
+}
+
+void FinanceManager::searchExpense()
+{
+    string searchTitle;
+
+    cout << "\nEnter Expense Title: ";
+    cin.ignore();
+    getline(cin, searchTitle);
+
+    bool found = false;
+
+    for (Expense expense : expenses)
+    {
+        if (expense.title == searchTitle)
+        {
+            cout << "\nExpense Found!\n";
+            cout << "Title    : " << expense.title << endl;
+            cout << "Amount   : ₹" << expense.amount << endl;
+            cout << "Category : " << expense.category << endl;
+            cout << "Date     : " << expense.date << endl;
+
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "\nExpense not found!\n";
+    }
+}
+
+void FinanceManager::editExpense()
+{
+    string searchTitle;
+
+    cout << "\nEnter Expense Title to Edit: ";
+    cin.ignore();
+    getline(cin, searchTitle);
+
+    bool found = false;
+
+    for (Expense &expense : expenses)
+    {
+        if (expense.title == searchTitle)
+        {
+            cout << "\nExpense Found!\n";
+
+            cout << "Current Amount: ₹" << expense.amount << endl;
+
+            cout << "Enter New Amount: ";
+            cin >> expense.amount;
+
+            cout << "\nExpense Updated Successfully!\n";
+
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "\nExpense not found!\n";
+    }
+}
+
+void FinanceManager::deleteExpense()
+{
+    string searchTitle;
+
+    cout << "\nEnter Expense Title to Delete: ";
+    cin.ignore();
+    getline(cin, searchTitle);
+
+    bool found = false;
+
+    for (auto it = expenses.begin(); it != expenses.end(); it++)
+    {
+        if (it->title == searchTitle)
+        {
+            expenses.erase(it);
+
+            cout << "\nExpense Deleted Successfully!\n";
+
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "\nExpense not found!\n";
+    }
+}
+
+void FinanceManager::expenseStatistics()
+{
+    if(expenses.empty())
+    {
+        cout << "\nNo Expenses Found!\n";
+        return;
+    }
+
+    double total = 0;
+
+    Expense highest = expenses[0];
+    Expense lowest = expenses[0];
+
+    for(const Expense &expense : expenses)
+    {
+        total += expense.amount;
+
+        if(expense.amount > highest.amount)
+            highest = expense;
+
+        if(expense.amount < lowest.amount)
+            lowest = expense;
+    }
+
+    double average = total / expenses.size();
+
+    cout << "\n====================================\n";
+    cout << "      EXPENSE STATISTICS\n";
+    cout << "====================================\n";
+
+    cout << "Total Expense : ₹" << total << endl;
+
+    cout << "Highest       : "
+         << highest.title
+         << " (₹" << highest.amount << ")\n";
+
+    cout << "Lowest        : "
+         << lowest.title
+         << " (₹" << lowest.amount << ")\n";
+
+    cout << "Average       : ₹"
+         << average << endl;
+
+    cout << "====================================\n";
 }
