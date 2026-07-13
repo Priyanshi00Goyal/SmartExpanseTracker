@@ -1,5 +1,6 @@
 #include <iostream>
 #include "User.h"
+#include "FinanceManager.h"
 
 using namespace std;
 
