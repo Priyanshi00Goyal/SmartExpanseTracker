@@ -2,6 +2,7 @@
 #include <fstream>
 #include "FinanceManager.h"
 
+
 using namespace std;
 
 void FinanceManager::dashboard()
@@ -30,22 +31,22 @@ void FinanceManager::dashboard()
                 break;
 
             case 2:
-                cout << "\n[Add Expense - Coming Soon]\n";
+                addExpense();
                 break;
 
             case 3:
-                cout << "\n[View Income - Coming Soon]\n";
+                viewIncome();
                 break;
 
             case 4:
-                cout << "\n[View Expenses - Coming Soon]\n";
-                break;
-
-            case 5:
-                cout << "\n[Monthly Report - Coming Soon]\n";
+                viewExpense();
                 break;
 
             case 6:
+                setBudget();
+                break;
+
+            case 7:
                 cout << "\nLogging out...\n";
                 break;
 
@@ -53,7 +54,7 @@ void FinanceManager::dashboard()
                 cout << "\nInvalid choice!\n";
         }
 
-    } while(choice != 6);
+    } while(choice != 7);
 }
 
 void FinanceManager::addIncome()
@@ -84,4 +85,120 @@ void FinanceManager::addIncome()
     file.close();
 
     cout << "\n✅ Income added successfully!\n";
+}
+
+void FinanceManager::viewIncome()
+{
+    ifstream file("data/income.txt");
+
+    Income income;
+
+    cout << "\n===== All Income =====\n\n";
+
+    while(file >> income.source >> income.amount >> income.date)
+    {
+        cout << income.source << "    "
+             << income.amount << "    "
+             << income.date << endl;
+    }
+
+    file.close();
+}
+
+void FinanceManager::addExpense()
+{
+    Expense expense;
+
+    cout << "\n===== Add Expense =====\n";
+
+    cout << "Enter Title: ";
+    cin >> expense.title;
+
+    cout << "Enter Amount: ";
+    cin >> expense.amount;
+
+    cout << "Enter Date (DD-MM-YYYY): ";
+    cin >> expense.date;
+
+    cout << "Enter Category: ";
+    cin >> expense.category;
+
+    // Store in vector
+    expenses.push_back(expense);
+
+    // Save to file
+    ofstream file("data/expense.txt", ios::app);
+
+    file << expense.title << " "
+         << expense.amount << " "
+         << expense.date << " "
+         << expense.category << endl;
+
+    file.close();
+
+    cout << "\n✅ Expense added successfully!\n";
+}
+
+void FinanceManager::viewExpense()
+{
+    ifstream file("data/expense.txt");
+
+    Expense expense;
+
+    cout << "\n===== All Expenses =====\n\n";
+
+    while(file >> expense.title >> expense.amount >> expense.date >> expense.category)
+    {
+        cout << expense.title << " "
+             << expense.amount << " "
+             << expense.date << " "
+             << expense.category << endl;
+    }
+
+    file.close();
+}
+
+void FinanceManager::monthlyReport()
+{
+    ifstream incomeFile("data/income.txt");
+    ifstream expenseFile("data/expense.txt");
+
+    Income income;
+    Expense expense;
+
+    double totalIncome = 0;
+    double totalExpense = 0;
+
+    while (incomeFile >> income.source >> income.amount >> income.date)
+    {
+        totalIncome += income.amount;
+    }
+
+    while (expenseFile >> expense.title >> expense.amount >> expense.date >> expense.category)
+    {
+        totalExpense += expense.amount;
+    }
+
+    incomeFile.close();
+    expenseFile.close();
+
+    cout << "\n=====================================\n";
+    cout << "         MONTHLY REPORT\n";
+    cout << "=====================================\n";
+
+    cout << "Total Income  : ₹" << totalIncome << endl;
+    cout << "Total Expense : ₹" << totalExpense << endl;
+
+    cout << "-------------------------------------\n";
+
+    cout << "Remaining     : ₹" << totalIncome - totalExpense << endl;
+
+    if(totalIncome >= totalExpense)
+    {
+        cout << "\n🎉 Great! You saved money this month.\n";
+    }
+    else
+    {
+        cout << "\n⚠️ You spent more than you earned!\n";
+    }
 }
