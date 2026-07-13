@@ -13,7 +13,7 @@ int main()
     do
     {
         cout << "\n=================================\n";
-        cout << "    SMART EXPENSE TRACKER\n";
+        cout << "   SMART EXPENSE TRACKER 1.0\n";
         cout << "=================================\n";
         cout << "1. Register\n";
         cout << "2. Login\n";
