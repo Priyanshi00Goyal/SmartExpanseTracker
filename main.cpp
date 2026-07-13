@@ -31,6 +31,7 @@ int main()
                 if(user.login())
                 {
                     cout << "\nWelcome to Smart Expense Tracker!\n";
+                    financeManager.dashboard();
                 }
                 break;
 
