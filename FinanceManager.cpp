@@ -240,7 +240,6 @@ void FinanceManager::setBudget()
 void FinanceManager::checkBudget()
 {
     double totalExpense = 0;
-    double BudgetUsed =(expenses / monthlyBudget) * 100;
 
     for (Expense expense : expenses)
     {
@@ -249,7 +248,6 @@ void FinanceManager::checkBudget()
 
     cout << "\nCurrent Budget : ₹" << monthlyBudget << endl;
     cout << "Total Expense  : ₹" << totalExpense << endl;
-    cout << "Budget Used  : " << BudgetUsed << "%" << endl;
 
     if (totalExpense > monthlyBudget)
     {
