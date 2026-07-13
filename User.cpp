@@ -22,3 +22,38 @@ void User::registerUser()
 
     cout << "\nRegistration Successful!\n";
 }
+
+bool User::login()
+{
+    string inputUsername, inputPassword;
+    string storedUsername, storedPassword;
+
+    cout << "\n===== Login =====\n";
+
+    cout << "Username: ";
+    cin >> inputUsername;
+
+    cout << "Password: ";
+    cin >> inputPassword;
+
+    ifstream file("data/users.txt");
+
+    while (file >> storedUsername >> storedPassword)
+    {
+        if (inputUsername == storedUsername &&
+            inputPassword == storedPassword)
+        {
+            file.close();
+
+            cout << "\nLogin Successful!\n";
+
+            return true;
+        }
+    }
+
+    file.close();
+
+    cout << "\nInvalid Username or Password!\n";
+
+    return false;
+}
