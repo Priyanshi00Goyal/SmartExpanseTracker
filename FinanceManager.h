@@ -28,6 +28,11 @@ public:
 
     void setBudget();
     void checkBudget();
+
+    void searchExpense();
+    void editExpense();
+    void deleteExpense();
+    void expenseStatistics();
 };
 
 #endif
