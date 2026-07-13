@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "FinanceManager.h"
 
 using namespace std;
@@ -25,7 +26,7 @@ void FinanceManager::dashboard()
         switch(choice)
         {
             case 1:
-                cout << "\n[Add Income - Coming Soon]\n";
+                addIncome();
                 break;
 
             case 2:
@@ -59,16 +60,28 @@ void FinanceManager::addIncome()
 {
     Income income;
 
+    cout << "\n===== Add Income =====\n";
+
     cout << "Enter Source: ";
     cin >> income.source;
 
     cout << "Enter Amount: ";
     cin >> income.amount;
 
-    cout << "Enter Date: ";
+    cout << "Enter Date (DD-MM-YYYY): ";
     cin >> income.date;
 
+    // Store in vector
     incomes.push_back(income);
-}
-    } while(choice != 6);
+
+    // Save to file
+    ofstream file("data/income.txt", ios::app);
+
+    file << income.source << " "
+         << income.amount << " "
+         << income.date << endl;
+
+    file.close();
+
+    cout << "\n✅ Income added successfully!\n";
 }
