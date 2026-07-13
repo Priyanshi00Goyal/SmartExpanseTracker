@@ -1,5 +1,6 @@
 #ifndef FINANCEMANAGER_H
 #define FINANCEMANAGER_H
+#include<vector>
 
 class FinanceManager
 {
@@ -9,6 +10,14 @@ private:
 public:
     void dashboard();
     void addIncome();
+};
+
+class Income
+{
+public:
+    string source;
+    double amount;
+    string date;
 };
 
 #endif
