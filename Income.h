@@ -1,3 +1,11 @@
+#ifndef INCOME_H
+#define INCOME_H
+
+#include <string>
+
+using namespace std;
+
+
 class Income
 {
 public:
@@ -5,3 +13,5 @@ public:
     double amount;
     string date;
 };
+
+#endif
