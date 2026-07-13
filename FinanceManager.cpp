@@ -42,11 +42,11 @@ void FinanceManager::dashboard()
                 viewExpense();
                 break;
 
-            case 6:
+            case 5:
                 setBudget();
                 break;
 
-            case 7:
+            case 6:
                 cout << "\nLogging out...\n";
                 break;
 
@@ -201,4 +201,17 @@ void FinanceManager::monthlyReport()
     {
         cout << "\n⚠️ You spent more than you earned!\n";
     }
+}
+
+void FinanceManager::setBudget()
+{
+    cout << "\nEnter Monthly Budget: ₹";
+    cin >> monthlyBudget;
+
+    cout << "Budget set successfully!\n";
+}
+
+void FinanceManager::checkBudget()
+{
+    // We'll implement this later.
 }
