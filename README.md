@@ -1,135 +1,288 @@
+<div align="center">
+
 # 💰 Smart Expense Tracker
 
-A modern **C++ console-based Expense Tracker** that helps users manage their personal finances efficiently. The project is built using **Object-Oriented Programming (OOP)** principles, the **Standard Template Library (STL)**, and **file handling** to provide a structured and practical learning experience.
+### A Modern Console-Based Personal Finance Management System built with C++
 
-> 🚧 **Project Status:** Under Development
+<img src="https://img.shields.io/badge/C++-17-blue?style=for-the-badge&logo=cplusplus" />
+<img src="https://img.shields.io/badge/OOP-Implemented-success?style=for-the-badge" />
+<img src="https://img.shields.io/badge/STL-Used-orange?style=for-the-badge" />
+<img src="https://img.shields.io/badge/File%20Handling-Complete-yellow?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Status-Completed-brightgreen?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Version-v3.0-blueviolet?style=for-the-badge" />
 
----
+*A feature-rich expense management system that helps users manage their finances efficiently using modern C++ programming concepts.*
 
-## ✨ Features
-
-### 👤 User Management
-
-* User Registration
-* User Login
-* Secure Authentication
-
-### 💵 Income Management
-
-* Add Income
-* View Income History
-
-### 💸 Expense Management
-
-* Add Expenses
-* Categorize Expenses
-* View Expense History
-
-### 📊 Reports & Analytics
-
-* Monthly Financial Report
-* Income vs Expense Summary
-* Remaining Balance
-* Savings Percentage
-
-### 💰 Budget Management
-
-* Set Monthly Budget
-* Budget Limit Alerts
-
-### 🔍 Search & Filter
-
-* Search Expenses by Category
-* Search Expenses by Date
-
-### 📁 Data Storage
-
-* Persistent data using text files
-* User-specific financial records
+</div>
 
 ---
 
-## 🛠️ Tech Stack
+# ✨ Features
 
-* **Language:** C++
-* **Concepts:** Object-Oriented Programming (OOP)
-* **Data Structures:** STL (`vector`, `map`, `string`)
-* **File Handling**
-* **Modular Programming**
+## 👤 User Authentication
+- Register a new account
+- Secure login system
+- Password masking
 
 ---
 
-## 📂 Project Structure
+## 💵 Income Management
+- Add income
+- View all income records
+- Persistent file storage
+
+---
+
+## 💸 Expense Management
+- Add expenses
+- View expenses
+- Edit expenses
+- Delete expenses
+- Automatic Expense ID generation
+
+---
+
+## 🔍 Smart Search
+
+Search expenses by:
+
+- 📝 Title
+- 📂 Category
+- 📅 Date
+- 💰 Amount Range
+
+---
+
+## 📊 Reports
+
+- Monthly Report
+- Category-wise Report
+- Expense Statistics
+- Budget Tracking
+
+---
+
+## 📁 Data Management
+
+- Save Data
+- Load Data
+- CSV Export
+- Backup & Restore
+- Transaction History
+
+---
+
+## 🎨 User Experience
+
+- Colored Console Interface
+- Professional Table Layout
+- Input Validation
+- Exception Handling
+- Easy Navigation
+
+---
+
+# 🛠 Technologies Used
+
+| Technology | Purpose |
+|------------|---------|
+| C++ | Core Programming Language |
+| Object-Oriented Programming | Code Structure |
+| STL | Data Storage & Algorithms |
+| File Handling | Persistent Storage |
+| Exception Handling | Error Management |
+| Console UI | User Interface |
+| Git & GitHub | Version Control |
+
+---
+
+# 📂 Project Structure
 
 ```text
-SmartExpenseTracker/
+SmartExpenseTracker
+│
+├── data
+│   ├── expenses.txt
+│   ├── income.txt
+│   ├── history.txt
+│   ├── expenses_backup.txt
+│   └── income_backup.txt
+│
+├── output
+│   └── main.exe
+│
+├── docs
+│   └── screenshots
 │
 ├── main.cpp
-├── User.h
 ├── User.cpp
-├── Expense.h
-├── Expense.cpp
-├── FinanceManager.h
+├── User.h
 ├── FinanceManager.cpp
-└── data/
-    ├── users.txt
-    ├── expenses.txt
-    └── income.txt
+├── FinanceManager.h
+├── Expense.h
+├── Income.h
+├── ConsoleUI.cpp
+├── ConsoleUI.h
+├── Utils.cpp
+├── Utils.h
+│
+├── README.md
+├── LICENSE
+└── .gitignore
 ```
 
 ---
 
-## 🎯 Learning Objectives
+# 🚀 Getting Started
 
-This project is designed to strengthen my understanding of:
+## Clone Repository
 
-* Classes and Objects
-* Encapsulation
-* Constructors
-* File Handling
-* Vectors and Maps
-* Functions
-* Modular Programming
-* Searching and Sorting
-* Real-world C++ Project Structure
+```bash
+git clone https://github.com/Priyanshi00Goyal/SmartExpenseTracker.git
+```
 
 ---
 
-## 🚀 Roadmap
+## Open Project
 
-* [ ] Project Setup
-* [ ] User Authentication
-* [ ] Expense Management
-* [ ] Income Management
-* [ ] File Storage
-* [ ] Budget Tracking
-* [ ] Financial Reports
-* [ ] Search & Filter
-* [ ] Enhanced Console UI
-* [ ] Project Documentation
+```bash
+cd SmartExpenseTracker
+```
 
 ---
 
-## 📸 Screenshots
+## Compile
 
-Screenshots will be added as the project progresses.
-
----
-
-## 🤝 Contributions
-
-This project is currently being developed as a personal learning project. Suggestions and feedback are always welcome.
+```bash
+g++ main.cpp User.cpp FinanceManager.cpp Utils.cpp ConsoleUI.cpp -o output/main.exe
+```
 
 ---
 
-## 📜 License
+## Run
 
-This project is licensed under the MIT License.
+### Windows
+
+```bash
+.\output\main.exe
+```
+
+### Linux/macOS
+
+```bash
+./output/main
+```
 
 ---
 
-### 👩‍💻 Author
+# 📸 Screenshots
 
-**Priyanshi Goyal**
+| Login | Dashboard |
+|-------|-----------|
+| *Coming Soon* | *Coming Soon* |
 
-⭐ If you like this project, consider giving it a star!
+| Reports | Statistics |
+|----------|------------|
+| *Coming Soon* | *Coming Soon* |
+
+---
+
+# 🧠 Concepts Implemented
+
+- Object-Oriented Programming (OOP)
+- Classes & Objects
+- Encapsulation
+- Modular Programming
+- File Handling
+- Exception Handling
+- Input Validation
+- STL (Vector)
+- Searching Algorithms
+- Sorting Algorithms
+- CSV Export
+- Backup & Restore
+- Transaction Logging
+- Professional Console UI
+
+---
+
+# 🎯 Learning Outcomes
+
+This project helped me strengthen my understanding of:
+
+- Designing modular applications
+- Building real-world console software
+- Managing data using files
+- Writing reusable and maintainable code
+- Implementing OOP principles
+- Using STL effectively
+- Error handling and validation
+- Git & GitHub workflow
+
+---
+
+# 🔮 Future Enhancements
+
+- SQLite Database
+- Password Encryption
+- Multi-user Support
+- GUI using Qt
+- Charts & Graphs
+- Cloud Backup
+- PDF Reports
+- AI-powered Expense Insights
+- Mobile Application
+- REST API Integration
+
+---
+
+# 📊 Project Information
+
+| Property | Value |
+|----------|-------|
+| Project | Smart Expense Tracker |
+| Language | C++ |
+| Version | v3.0 |
+| Type | Console Application |
+| Architecture | Object-Oriented |
+| Status | ✅ Completed |
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a new branch
+3. Commit your changes
+4. Push your branch
+5. Open a Pull Request
+
+---
+
+# 👩‍💻 About Me
+
+### Priyanshi Goyal
+
+🎓 B.Tech CSE Student
+
+💻 Passionate about Software Development, Full Stack Development & Problem Solving
+
+🌟 Currently building projects to strengthen my development skills.
+
+**GitHub**
+> https://github.com/Priyanshi00Goyal
+
+**LinkedIn**
+> https://www.linkedin.com/in/priyanshi-goyal
+
+---
+
+<div align="center">
+
+## ⭐ If you like this project, don't forget to Star the repository!
+
+Made with ❤️ and C++
+
+</div>
