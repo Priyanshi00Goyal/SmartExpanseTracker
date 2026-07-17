@@ -43,6 +43,13 @@ public:
     void deleteExpense();
     void expenseStatistics();
 
+    void searchByTitle();
+    void searchByCategory();
+    void searchByDate();
+    void searchByAmount();
+    void displayExpense(const Expense &expense);
+    void displayExpenseHeader();
+
     void saveExpenses();
     void loadExpenses();
     void saveIncome();
@@ -50,6 +57,13 @@ public:
     void categoryReport();
     void exportCSV();
     void sortExpenses();
+
+    void backupData();
+    void restoreData();
+    void copyFile(const string &source, const string &destination);
+
+    void addHistory(string action, string title, double amount);
+    void viewHistory();
 };
 
 #endif
