@@ -2,9 +2,14 @@
 #define FINANCEMANAGER_H
 
 #include <vector>
+#include <map>
+#include <algorithm>
 
 #include "Income.h"
 #include "Expense.h"
+
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -14,8 +19,12 @@ private:
     vector<Income> incomes;
     vector<Expense> expenses; 
     double monthlyBudget = 0;
+    int nextExpenseId = 1;
 
 public:
+    void showDashboardMenu();
+    int getDashboardChoice();
+    void handleDashboardChoice(int choice);
     void dashboard();
 
     void addIncome();
@@ -33,6 +42,14 @@ public:
     void editExpense();
     void deleteExpense();
     void expenseStatistics();
+
+    void saveExpenses();
+    void loadExpenses();
+    void saveIncome();
+    void loadIncome();
+    void categoryReport();
+    void exportCSV();
+    void sortExpenses();
 };
 
 #endif
