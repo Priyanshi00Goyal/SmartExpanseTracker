@@ -1,15 +1,27 @@
+/*
+-------------------------------------------------------
+Project : Smart Expense Tracker
+Version : v3.0
+Author  : Priyanshi Goyal
+Language: C++
+-------------------------------------------------------
+*/
+
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <stdexcept>
 #include <iomanip>
+#include <ctime>
 #include "FinanceManager.h"
-
-
+#include "Utils.h"
+#include "ConsoleUI.h"
 using namespace std;
 
 void FinanceManager::showDashboardMenu()
 {
     cout << "\n=====================================\n";
-    cout << "         USER DASHBOARD\n";
+    ConsoleUI::heading("========== USER DASHBOARD ==========");
     cout << "=====================================\n";
     cout << "1. Add Income\n";
     cout << "2. Add Expense\n";
@@ -24,7 +36,10 @@ void FinanceManager::showDashboardMenu()
     cout << "11. Category Report\n";
     cout << "12. Sort Expenses\n";
     cout << "13. Export Expenses (CSV)\n";
-    cout << "14. Logout\n";
+    cout << "14. Backup Data\n";
+    cout << "15. Restore Backup\n";
+    cout << "16. View Transaction History\n";
+    cout << "17. Logout\n";
 }
 
 int FinanceManager::getDashboardChoice()
@@ -37,7 +52,7 @@ int FinanceManager::getDashboardChoice()
     {
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Invalid input! Enter a number: ";
+        ConsoleUI::error("Invalid Input! Enter a number :");
     }
 
     return choice;
@@ -100,11 +115,24 @@ void FinanceManager::handleDashboardChoice(int choice)
             break;
 
         case 14:
-            cout << "\nLogging out...\n";
+            backupData();
             break;
 
+        case 15:
+            restoreData();
+            break;
+
+        case 16:
+            viewHistory();
+            break;
+                
+        case 17:
+            cout << "\nLogging out...\n";
+            break;
+        
+
         default:
-            cout << "\nInvalid choice!\n";
+            ConsoleUI::error("Invalid Choice!");
     }
 }
 
@@ -120,7 +148,7 @@ void FinanceManager::dashboard()
 
         handleDashboardChoice(choice);
 
-    } while(choice != 14);
+    } while(choice != 17);
 }
 
 void FinanceManager::addIncome()
@@ -135,7 +163,7 @@ void FinanceManager::addIncome()
         getline(cin, income.source);
 
         if(income.source.empty())
-            cout << "Source cannot be empty!\n";
+            ConsoleUI::error("Source cannot be Empty!");
 
     } while(income.source.empty());
 
@@ -147,7 +175,7 @@ void FinanceManager::addIncome()
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "Invalid amount! Enter again: ";
+            ConsoleUI::error("Invalid Amount! Enter Again :");
         }
         else if(income.amount <= 0)
         {
@@ -159,21 +187,31 @@ void FinanceManager::addIncome()
         }
     }
 
-    cout << "Enter Date (DD-MM-YYYY): ";
-    cin >> income.date;
+    do
+    {
+        cout << "Enter Date (DD-MM-YYYY): ";
+        cin >> income.date;
+
+        if(!isValidDate(income.date))
+            ConsoleUI::error("Invalid Date Format!");
+
+    } while(!isValidDate(income.date));
 
     incomes.push_back(income);
 
     saveIncome();
+    addHistory("Added Income",
+             income.source,
+             income.amount);
 
-    cout << "\nIncome Added Successfully!\n";
+    ConsoleUI::success("No Income Found!");
 }
 
 void FinanceManager::viewIncome()
 {
     if(incomes.empty())
     {
-        cout << "\nNo Income Found!\n";
+        ConsoleUI::warning("No Income Found!");
         return;
     }
 
@@ -213,7 +251,7 @@ void FinanceManager::addExpense()
         getline(cin, expense.title);
 
         if(expense.title.empty())
-            cout << "Title cannot be empty!\n";
+            ConsoleUI::warning("Title canot be Empty!");
 
     } while(expense.title.empty());
 
@@ -225,7 +263,7 @@ void FinanceManager::addExpense()
         {
             cin.clear();
             cin.ignore(1000, '\n');
-            cout << "Invalid amount! Enter again: ";
+            ConsoleUI::error("Invalid Amount! Enter Again :");
         }
         else if(expense.amount <= 0)
         {
@@ -237,8 +275,15 @@ void FinanceManager::addExpense()
         }
     }
 
-    cout << "Enter Date (DD-MM-YYYY): ";
-    cin >> expense.date;
+    do
+    {
+        cout << "Enter Date (DD-MM-YYYY): ";
+        cin >> expense.date;
+
+        if(!isValidDate(expense.date))
+            ConsoleUI::error("Invalid Date Format!");
+
+    } while(!isValidDate(expense.date));
 
     cin.ignore();
 
@@ -248,51 +293,37 @@ void FinanceManager::addExpense()
         getline(cin, expense.category);
 
         if(expense.category.empty())
-            cout << "Category cannot be empty!\n";
+            ConsoleUI::warning("Category cannot be Empty!");
 
     } while(expense.category.empty());
 
     expenses.push_back(expense);
 
     saveExpenses();
-
+    addHistory("Added Expense",
+                 expense.title,
+                 expense.amount);
     checkBudget();
 
-    cout << "\nExpense Added Successfully!\n";
+    ConsoleUI::success("Expense Added Successfully!");
 }
 
 void FinanceManager::viewExpense()
 {
     if(expenses.empty())
     {
-        cout << "\nNo Expenses Found!\n";
+        ConsoleUI::warning("No Expense Found!");
         return;
     }
 
-    cout << "\n==========================================================================\n";
-
-    cout << left
-         << setw(6)  << "ID"
-         << setw(20) << "TITLE"
-         << setw(12) << "AMOUNT"
-         << setw(20) << "CATEGORY"
-         << setw(15) << "DATE"
-         << endl;
-
-    cout << "==========================================================================\n";
+    displayExpenseHeader();
 
     for(const Expense &expense : expenses)
     {
-        cout << left
-             << setw(6)  << expense.id
-             << setw(20) << expense.title
-             << setw(12) << expense.amount
-             << setw(20) << expense.category
-             << setw(15) << expense.date
-             << endl;
+        displayExpense(expense);
     }
 
-    cout << "==========================================================================\n";
+    cout << "====================================================================================\n";
 }
 
 void FinanceManager::monthlyReport()
@@ -426,33 +457,158 @@ void FinanceManager::checkBudget()
 
 void FinanceManager::searchExpense()
 {
-    int id;
+    int choice;
 
-    cout << "\nEnter Expense ID: ";
-    cin >> id;
+    do
+    {
+        cout << "\n========== SEARCH MENU ==========\n";
+        cout << "1. Search by Title\n";
+        cout << "2. Search by Category\n";
+        cout << "3. Search by Date\n";
+        cout << "4. Search by Amount Range\n";
+        cout << "5. Back\n";
+
+        cout << "\nEnter Choice: ";
+        cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                searchByTitle();
+                break;
+
+            case 2:
+                searchByCategory();
+                break;
+
+            case 3:
+                searchByDate();
+                break;
+
+            case 4:
+                searchByAmount();
+                break;
+
+            case 5:
+                break;
+
+            default:
+                cout << "Invalid Choice!\n";
+        }
+
+    } while(choice != 5);
+}
+
+void FinanceManager::searchByTitle()
+{
+    cin.ignore();
+
+    string title;
+
+    cout << "Enter Title: ";
+    getline(cin, title);
 
     bool found = false;
 
-    for (Expense expense : expenses)
-    {
-        if (expense.id == id)
-        {
-            cout << "\nExpense Found!\n";
-            cout << "ID       : " << expense.id <<endl;
-            cout << "Title    : " << expense.title << endl;
-            cout << "Amount   : ₹" << expense.amount << endl;
-            cout << "Category : " << expense.category << endl;
-            cout << "Date     : " << expense.date << endl;
+    displayExpenseHeader();
 
-            found = true;
-            break;
-        }
+    for(const Expense &expense : expenses)
+    {
+        displayExpense(expense);
+    }
+    if(!found)
+        cout << "\nNo Expense Found!\n";
+}
+
+void FinanceManager::searchByCategory()
+{
+    cin.ignore();
+
+    string category;
+
+    cout << "Enter Category: ";
+    getline(cin, category);
+
+    bool found = false;
+
+    displayExpenseHeader();
+
+    for(const Expense &expense : expenses)
+    {
+        displayExpense(expense);
     }
 
-    if (!found)
+    if(!found)
+        cout << "\nNo Expense Found!\n";
+}
+
+void FinanceManager::searchByDate()
+{
+    string date;
+
+    cout << "Enter Date (DD-MM-YYYY): ";
+    cin >> date;
+
+    bool found = false;
+
+    displayExpenseHeader();
+
+    for(const Expense &expense : expenses)
     {
-        cout << "\nExpense not found!\n";
+        displayExpense(expense);
     }
+
+    if(!found)
+        cout << "\nNo Expense Found!\n";
+}
+
+void FinanceManager::searchByAmount()
+{
+    double minAmount, maxAmount;
+
+    cout << "Enter Minimum Amount: ";
+    cin >> minAmount;
+
+    cout << "Enter Maximum Amount: ";
+    cin >> maxAmount;
+
+    bool found = false;
+
+    displayExpenseHeader();
+
+    for(const Expense &expense : expenses)
+    {
+        displayExpense(expense);
+    }
+
+    if(!found)
+        cout << "\nNo Expense Found!\n";
+}
+
+void FinanceManager::displayExpenseHeader()
+{
+    cout << "\n====================================================================================\n";
+
+    cout << left
+         << setw(6)  << "ID"
+         << setw(25) << "TITLE"
+         << setw(12) << "AMOUNT"
+         << setw(20) << "CATEGORY"
+         << setw(15) << "DATE"
+         << endl;
+
+    cout << "====================================================================================\n";
+}
+
+void FinanceManager::displayExpense(const Expense &expense)
+{
+    cout << left
+         << setw(6)  << expense.id
+         << setw(25) << expense.title
+         << setw(12) << fixed << setprecision(2) << expense.amount
+         << setw(20) << expense.category
+         << setw(15) << expense.date
+         << endl;
 }
 
 void FinanceManager::editExpense()
@@ -475,6 +631,9 @@ void FinanceManager::editExpense()
             cout << "Enter New Amount: ";
             cin >> expense.amount;
             saveExpenses();
+            addHistory("Edited Expense",
+                 expense.title,
+                 expense.amount);
             cout << "\nExpense Updated Successfully!\n";
 
             found = true;
@@ -494,7 +653,7 @@ void FinanceManager::saveIncome()
 
     if(!file)
     {
-        cout << "Unable to save income!\n";
+        ConsoleUI::error("Failed to save income data!");
         return;
     }
 
@@ -502,10 +661,13 @@ void FinanceManager::saveIncome()
     {
         file << income.source << ","
              << income.amount << ","
-             << income.date << endl;
+             << income.date
+             << endl;
     }
 
     file.close();
+
+    ConsoleUI::success("Income saved successfully.");
 }
 
 void FinanceManager::loadIncome()
@@ -513,26 +675,45 @@ void FinanceManager::loadIncome()
     ifstream file("data/income.txt");
 
     if(!file)
+    {
+        cout << "Income file not found.\n";
         return;
+    }
 
     incomes.clear();
 
-    Income income;
     string line;
 
     while(getline(file, line))
     {
-        stringstream ss(line);
+        try
+        {
+            stringstream ss(line);
 
-        getline(ss, income.source, ',');
+            Income income;
 
-        string amount;
-        getline(ss, amount, ',');
-        income.amount = stod(amount);
+            string amount;
 
-        getline(ss, income.date);
+            getline(ss, income.source, ',');
+            getline(ss, amount, ',');
+            getline(ss, income.date);
 
-        incomes.push_back(income);
+            if(income.source.empty() ||
+               amount.empty() ||
+               income.date.empty())
+            {
+                throw invalid_argument("Incomplete record");
+            }
+
+            income.amount = stod(amount);
+
+            incomes.push_back(income);
+        }
+
+        catch(const exception &e)
+        {
+            cout << "Skipped Invalid Income Record.\n";
+        }
     }
 
     file.close();
@@ -541,7 +722,7 @@ void FinanceManager::loadIncome()
 void FinanceManager::deleteExpense()
 {
     int id;
-
+    Expense deletedExpense = expenses[id];
     cout << "\nEnter Expense ID: ";
     cin >> id;
 
@@ -554,6 +735,9 @@ void FinanceManager::deleteExpense()
             expenses.erase(it);
             checkBudget();
             saveExpenses();
+            addHistory("Deleted Expense",
+                 deletedExpense.title,
+                 deletedExpense.amount);
 
             cout << "\nExpense Deleted Successfully!\n";
 
@@ -619,55 +803,82 @@ void FinanceManager::saveExpenses()
 {
     ofstream file("data/expenses.txt");
 
-    for (const Expense &expense : expenses)
+    if(!file)
     {
-        file
-            << expense.id << ","
-            << expense.title << ","
-            << expense.amount << ","
-            << expense.category << ","
-            << expense.date << endl;
+        ConsoleUI::error("Failed to save expense data!");
+        return;
+    }
+
+    for(const Expense &expense : expenses)
+    {
+        file << expense.id << ","
+             << expense.title << ","
+             << expense.amount << ","
+             << expense.category << ","
+             << expense.date
+             << endl;
     }
 
     file.close();
+
+    ConsoleUI::success("Expenses saved successfully.");
 }
 
 void FinanceManager::loadExpenses()
 {
     ifstream file("data/expenses.txt");
 
-    if (!file)
+    if(!file)
+    {
+        cout << "Expenses file not found.\n";
         return;
+    }
 
     expenses.clear();
 
     string line;
 
-    while (getline(file, line))
+    while(getline(file, line))
     {
-        stringstream ss(line);
+        try
+        {
+            stringstream ss(line);
 
-        Expense expense;
+            Expense expense;
 
-        string idStr;
-        string amountStr;
+            string id;
+            string amount;
 
-        getline(ss, idStr, ',');
-        expense.id = stoi(idStr);
+            getline(ss, id, ',');
+            getline(ss, expense.title, ',');
+            getline(ss, amount, ',');
+            getline(ss, expense.category, ',');
+            getline(ss, expense.date);
 
-        getline(ss, expense.title, ',');
+            if(id.empty() ||
+               expense.title.empty() ||
+               amount.empty() ||
+               expense.category.empty() ||
+               expense.date.empty())
+            {
+                throw invalid_argument("Incomplete Record");
+            }
 
-        getline(ss, amountStr, ',');
-        expense.amount = stod(amountStr);
+            expense.id = stoi(id);
+            expense.amount = stod(amount);
 
-        getline(ss, expense.category, ',');
+            expenses.push_back(expense);
 
-        getline(ss, expense.date);
+            if(expense.id >= nextExpenseId)
+            {
+                nextExpenseId = expense.id + 1;
+            }
+        }
 
-        expenses.push_back(expense);
-
-        if(expense.id >= nextExpenseId)
-            nextExpenseId = expense.id + 1;
+        catch(const exception &e)
+        {
+            cout << "Skipped Invalid Expense Record.\n";
+        }
     }
 
     file.close();
@@ -778,17 +989,95 @@ void FinanceManager::exportCSV()
 
     file << "ID,Title,Amount,Category,Date\n";
 
+    displayExpenseHeader();
+
     for(const Expense &expense : expenses)
     {
-        file << expense.id << ","
-             << expense.title << ","
-             << expense.amount << ","
-             << expense.category << ","
-             << expense.date << "\n";
+        displayExpense(expense);
     }
-
     file.close();
 
     cout << "\n✅ Report exported successfully!\n";
     cout << "Location: data/expenses_report.csv\n";
+}
+
+void FinanceManager::copyFile(const string &source,
+                              const string &destination)
+{
+    ifstream src(source, ios::binary);
+
+    if(!src)
+    {
+        cout << "\nSource file not found!\n";
+        return;
+    }
+
+    ofstream dest(destination, ios::binary);
+
+    dest << src.rdbuf();
+
+    src.close();
+    dest.close();
+}
+
+void FinanceManager::backupData()
+{
+    try
+    {
+        copyFile("data/income.txt",
+                 "data/income_backup.txt");
+
+        copyFile("data/expenses.txt",
+                 "data/expenses_backup.txt");
+
+        ConsoleUI::success("Backup created successfully.");
+    }
+    catch(...)
+    {
+        ConsoleUI::error("Backup failed!");
+    }
+}
+
+void FinanceManager::restoreData()
+{
+    try
+    {
+        copyFile("data/income_backup.txt",
+                 "data/income.txt");
+
+        copyFile("data/expenses_backup.txt",
+                 "data/expenses.txt");
+
+        loadIncome();
+        loadExpenses();
+
+        ConsoleUI::success("Backup restored successfully.");
+    }
+    catch(...)
+    {
+        ConsoleUI::error("Restore failed!");
+    }
+}
+
+void FinanceManager::viewHistory()
+{
+    ifstream file("data/history.txt");
+
+    if(!file)
+    {
+        ConsoleUI::warning("No Transaction History!");
+        return;
+    }
+
+    string line;
+
+    ConsoleUI::heading(
+        "\n============= TRANSACTION HISTORY =============");
+
+    while(getline(file, line))
+    {
+        cout << line << endl;
+    }
+
+    file.close();
 }
