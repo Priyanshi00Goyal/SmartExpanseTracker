@@ -1,3 +1,12 @@
+/*
+-------------------------------------------------------
+Project : Smart Expense Tracker
+Version : v3.0
+Author  : Priyanshi Goyal
+Language: C++
+-------------------------------------------------------
+*/
+
 #include <iostream>
 #include "User.h"
 #include "FinanceManager.h"
@@ -8,6 +17,8 @@ int main()
 {
     User user;
     FinanceManager financeManager;
+    financeManager.loadExpenses();
+    financeManager.loadIncome();
     int choice;
 
     do
@@ -42,6 +53,11 @@ int main()
             default:
                 cout << "\nInvalid Choice! Please try again.\n";
         }
+
+    } while(choice != 3);
+
+    return 0;
+}
 
     } while(choice != 3);
 
