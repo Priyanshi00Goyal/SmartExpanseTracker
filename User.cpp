@@ -13,7 +13,7 @@ void User::registerUser()
     cin >> username;
 
     cout << "Enter Password: ";
-    cin >> password;
+    pasword = inputPassword();
 
     ofstream file("data/users.txt", ios::app);
 
@@ -35,7 +35,7 @@ bool User::login()
     cin >> inputUsername;
 
     cout << "Password: ";
-    cin >> inputPassword;
+    password = inputPassword();
 
     ifstream file("data/users.txt");
 
