@@ -1,3 +1,12 @@
+/*
+-------------------------------------------------------
+Project : Smart Expense Tracker
+Version : v3.0
+Author  : Priyanshi Goyal
+Language: C++
+-------------------------------------------------------
+*/
+
 #include "User.h"
 #include "Utils.h"
 #include <iostream>
@@ -13,7 +22,7 @@ void User::registerUser()
     cin >> username;
 
     cout << "Enter Password: ";
-    pasword = inputPassword();
+    password = inputPassword();
 
     ofstream file("data/users.txt", ios::app);
 
@@ -26,7 +35,7 @@ void User::registerUser()
 
 bool User::login()
 {
-    string inputUsername, inputPassword;
+    string inputUsername, inputpassword;
     string storedUsername, storedPassword;
 
     cout << "\n===== Login =====\n";
@@ -42,7 +51,7 @@ bool User::login()
     while (file >> storedUsername >> storedPassword)
     {
         if (inputUsername == storedUsername &&
-            inputPassword == storedPassword)
+            inputpassword == storedPassword)
         {
             file.close();
 
@@ -54,6 +63,10 @@ bool User::login()
 
     file.close();
 
+    cout << "\nInvalid Username or Password!\n";
+
+    return false;
+}
     cout << "\nInvalid Username or Password!\n";
 
     return false;
